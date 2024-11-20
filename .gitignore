@@ -1,0 +1,8 @@
+.DS_Store
+.terraform.lock.hcl
+kubeconfig*
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+gcp-ar-key.json
