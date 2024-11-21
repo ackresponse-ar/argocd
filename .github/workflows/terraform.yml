@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Plan and Apply
+    name: Terraform Plan, Apply, and Destroy
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,6 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: echo "${{ secrets.NG_SA_KEY_GCLOUD }}" > $GOOGLE_APPLICATION_CREDENTIALS
 
-
       # Setup Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -33,25 +32,24 @@ jobs:
 
       # Terraform init
       - name: Initialize Terraform
-      env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform init
 
       # Terraform plan
       - name: Terraform Plan
-      env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform plan -out=tfplan
 
       # Terraform apply (Only on push events to main)
       - name: Terraform Apply
         if: github.event_name == 'push'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
-        run:
-          terraform apply -auto-approve tfplan
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
+        run: terraform apply -auto-approve tfplan
 
-          # Wait for 1 minute
+      # Wait for 1 minute
       - name: Wait for 1 minute
         run: sleep 60
 
@@ -59,5 +57,5 @@ jobs:
       - name: Terraform Destroy
         if: github.event_name == 'push'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform destroy -auto-approve
