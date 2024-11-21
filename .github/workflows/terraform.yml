@@ -19,11 +19,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Google Cloud credentials
-      - name: Set up Google Cloud credentials
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
-        run: echo "${{ secrets.NG_SA_KEY_GCLOUD }}" > $GOOGLE_APPLICATION_CREDENTIALS
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: "concepts-demo"
+          credentials_json: ${{ secrets.NG_SA_KEY_GCLOUD }}
 
       # Setup Terraform CLI
       - name: Setup Terraform
@@ -33,21 +32,15 @@ jobs:
 
       # Terraform init
       - name: Initialize Terraform
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform init
 
       # Terraform plan
       - name: Terraform Plan
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform plan -out=tfplan
 
       # Terraform apply (Only on push events to main)
       - name: Terraform Apply
         if: github.event_name == 'push'
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform apply -auto-approve tfplan
 
       # Wait for 1 minute
@@ -57,6 +50,4 @@ jobs:
       # Terraform destroy
       - name: Terraform Destroy
         if: github.event_name == 'push'
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
         run: terraform destroy -auto-approve

@@ -1,7 +1,5 @@
 provider "google" {
   project     = "concepts-demo"
-  credentials = file("${path.module}/NG_SA_KEY_GCLOUD.json")
-
 }
 
 provider "kubernetes" {
