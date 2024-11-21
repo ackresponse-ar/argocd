@@ -18,6 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Set up Google Cloud credentials
+      - name: Set up Google Cloud credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
+
       # Setup Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -35,4 +40,14 @@ jobs:
       # Terraform apply (Only on push events to main)
       - name: Terraform Apply
         if: github.event_name == 'push'
-        run: terraform apply -auto-approve tfplan
+        run:
+          terraform apply -auto-approve tfplan
+
+          # Wait for 1 minute
+      - name: Wait for 1 minute
+        run: sleep 60
+
+      # Terraform destroy
+      - name: Terraform Destroy
+        if: github.event_name == 'push'
+        run: terraform destroy -auto-approve

@@ -1,6 +1,6 @@
 provider "google" {
   project     = "concepts-demo"
-  # credentials = file("gcp-ar-key.json")
+  credentials = file("NG_SA_KEY_GCLOUD.json")
 }
 
 provider "kubernetes" {
