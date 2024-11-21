@@ -33,15 +33,21 @@ jobs:
 
       # Terraform init
       - name: Initialize Terraform
+      env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
         run: terraform init
 
       # Terraform plan
       - name: Terraform Plan
+      env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
         run: terraform plan -out=tfplan
 
       # Terraform apply (Only on push events to main)
       - name: Terraform Apply
         if: github.event_name == 'push'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
         run:
           terraform apply -auto-approve tfplan
 
@@ -52,4 +58,6 @@ jobs:
       # Terraform destroy
       - name: Terraform Destroy
         if: github.event_name == 'push'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-credentials.json
         run: terraform destroy -auto-approve
