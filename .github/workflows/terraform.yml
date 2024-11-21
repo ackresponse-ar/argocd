@@ -22,6 +22,8 @@ jobs:
       - name: Set up Google Cloud credentials
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/NG_SA_KEY_GCLOUD.json
+        run: echo "${{ secrets.NG_SA_KEY_GCLOUD }}" > $GOOGLE_APPLICATION_CREDENTIALS
+
 
       # Setup Terraform CLI
       - name: Setup Terraform
