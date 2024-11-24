@@ -119,7 +119,7 @@ resource "google_container_node_pool" "primary_nodes" {
 
   # Node configuration
   node_config {
-    machine_type    = var.gke_node_machine_type
+    machine_type = var.gke_node_machine_type
   }
 }
 
@@ -127,6 +127,9 @@ resource "google_container_node_pool" "primary_nodes" {
 resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
+  }
+  timeouts {
+    delete = "10m" # Increase as needed
   }
 }
 
