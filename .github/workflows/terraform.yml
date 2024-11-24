@@ -43,6 +43,13 @@ jobs:
         if: github.event_name == 'push'
         run: terraform apply -auto-approve tfplan
 
+      - name: Port-forward ArgoCD Server
+      run: |
+        POD_NAME=$(kubectl get pod --namespace argocd --selector="app.kubernetes.io/name=argocd-server" --output jsonpath="{.items[0].metadata.name}")
+        kubectl port-forward --namespace argocd $POD_NAME 8080:443 &
+        sleep 5
+
+
       # Extract Argo CD admin password
       - name: Get Argo CD Admin Password
         id: argocd_password
