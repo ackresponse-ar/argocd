@@ -144,10 +144,13 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
   version    = "5.12.0"  
+  values = [file("values/argocd.yaml")]
+
 }
 
 
 output "argocd_server_url" {
   value = "https://${helm_release.argocd.name}-server.${kubernetes_namespace.argocd.metadata[0].name}.svc.cluster.local"
 }
+
 
