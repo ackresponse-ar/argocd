@@ -1,6 +1,6 @@
 variable "vpc_name" {
   type    = string
-  default = "agrocd-vpc"
+  default = "argo-vpc"
 }
 
 variable "vpc_auto_create_subnets" {
@@ -15,7 +15,7 @@ variable "vpc_mtu" {
 
 variable "vpc_subnet_name" {
   type    = string
-  default = "agrocd-vpc-sub"
+  default = "argo-vpc-sub"
 }
 
 variable "vpc_subnet_cidr_range" {
@@ -30,7 +30,7 @@ variable "vpc_subnet_region" {
 
 variable "vpc_firewall_icmp_name" {
   type    = string
-  default = "agrocd-vpc-allow-icmp"
+  default = "argo-vpc-allow-icmp"
 }
 
 variable "vpc_firewall_icmp_protocol" {
@@ -45,7 +45,7 @@ variable "vpc_firewall_icmp_source_range" {
 
 variable "vpc_firewall_custom_name" {
   type    = string
-  default = "agrocd-vpc-allow-custom"
+  default = "argo-vpc-allow-custom"
 }
 
 variable "vpc_firewall_custom_protocol" {
@@ -60,7 +60,7 @@ variable "vpc_firewall_custom_source_range" {
 
 variable "vpc_firewall_ssh_name" {
   type    = string
-  default = "agrocd-vpc-allow-ssh"
+  default = "argo-vpc-allow-ssh"
 }
 
 variable "vpc_firewall_ssh_protocol" {
@@ -81,7 +81,7 @@ variable "vpc_firewall_ssh_source_range" {
 
 variable "vpc_firewall_rdp_name" {
   type    = string
-  default = "agrocd-vpc-allow-rdp"
+  default = "argo-vpc-allow-rdp"
 }
 
 variable "vpc_firewall_rdp_protocol" {
@@ -106,7 +106,7 @@ variable "project_id" {
 
 variable "gke_cluster_name" {
   type        = string
-  default     = "agrocd"    
+  default     = "argo"    
 }
 
 variable "gke_location" {

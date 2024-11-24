@@ -120,17 +120,9 @@ resource "google_container_node_pool" "primary_nodes" {
   # Node configuration
   node_config {
     machine_type    = var.gke_node_machine_type
-    service_account = var.gke_service_account_email
-    oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
-    tags            = ["gke-node"] # This should match firewall rules with 'gke-node' target tags
   }
 }
 
-
-
-output "kubeconfig" {
-  value = google_container_cluster.primary.endpoint
-}
 
 resource "kubernetes_namespace" "argocd" {
   metadata {
@@ -143,19 +135,15 @@ resource "helm_release" "argocd" {
   namespace  = kubernetes_namespace.argocd.metadata[0].name
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
-  version    = "5.12.0"
-
 }
 
+# resource "kubernetes_manifest" "argocd_application" {
+#   depends_on = [helm_release.argocd]
+#   manifest   = yamldecode(file("./argocd.yaml"))
+# }
 
-
-resource "kubernetes_manifest" "argocd_application" {
-  depends_on = [helm_release.argocd]
-  manifest   = yamldecode(file("./argocd.yaml"))
-}
-
-output "argocd_server_url" {
-  value = "https://${helm_release.argocd.name}-server.${kubernetes_namespace.argocd.metadata[0].name}.svc.cluster.local"
-}
+# output "argocd_server_url" {
+#   value = "https://${helm_release.argocd.name}-server.${kubernetes_namespace.argocd.metadata[0].name}.svc.cluster.local"
+# }
 
 
